@@ -12,7 +12,7 @@ variable "availability_zone" {
 variable "private_cidrs" {
   type = list(any)
   default = ["10.0.3.0/24","10.0.4.0/24"]
-}
+} 
 
 variable "public_cidrs" {
   type = list(any)
