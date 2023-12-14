@@ -17,3 +17,9 @@ provider "aws" {
 module "Network" {
   source = "./NETWORK"
 }
+
+# EFS MODULE SECTION
+module "EFS" {
+source = "./EFS"
+target_subnet = module.Network.private_subnet_ids
+}

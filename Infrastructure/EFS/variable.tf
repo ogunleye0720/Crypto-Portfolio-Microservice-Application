@@ -1,3 +1,8 @@
+variable "target_subnet" {
+    type = list(any)
+    description = "list of target subnets to mount the efs target"
+}
+
 variable "infrastucture_environment_name" {
   type = string
   default = "staging-DigitalBank"
@@ -10,8 +15,8 @@ variable "creation_token" {
 }
 
 variable "throughput_mode" {
-  type = any
-  default = provisioned
+  type = string
+  default = "provisioned"
 }
 
 variable "performance_mode" {
@@ -26,6 +31,15 @@ variable "encryption" {
 }
 
 variable "provisioned_throughput_in_mibps" {
+  type = string 
+  default = "20"
+}
+variable "number_of_target" {
   type = number
-  default = 20
+  default = 2
+  description = "The number of tagets determines the number of subnets to attach efs_mount_target" #It must match the number of subnets to be used !!!
+}
+variable "backup_policy_status" {
+  type = string
+  default = "enabled"
 }
