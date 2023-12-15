@@ -14,7 +14,7 @@ provider "aws" {
 # Hashicorp Vault Provider
 provider "vault" {
   address = "http://127.0.0.1:8200"
-  token = "hvs.dpRpCU2HjyXMQRpZ7w3hwJOG"
+  token = ""
 }
 
 # NETWORK MODULE SECTION
@@ -33,3 +33,11 @@ target_subnet = module.Network.private_subnet_ids
 module "SECRET_MANAGER" {
   source = "./SECRETE_STORE"
 }
+
+# EKS MODULE SECTION
+module "EKS" {
+  source = "./EKS"
+  subnet_ids = module.Network.private_subnet_ids
+}
+
+/* "hvs.dpRpCU2HjyXMQRpZ7w3hwJOG" */
