@@ -14,7 +14,7 @@ provider "aws" {
 # Hashicorp Vault Provider
 provider "vault" {
   address = "http://127.0.0.1:8200"
-  token = "hvs.dpRpCU2HjyXMQRpZ7w3hwJOG"
+  token = ""
 }
 
 # NETWORK MODULE SECTION
