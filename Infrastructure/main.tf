@@ -33,3 +33,8 @@ target_subnet = module.Network.private_subnet_ids
 module "SECRET_MANAGER" {
   source = "./SECRETE_STORE"
 }
+# EKS MODULE SECTION
+module "EKS" {
+  source = "./EKS"
+  subnet_ids = module.Network.private_subnet_ids
+}
