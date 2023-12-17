@@ -31,7 +31,7 @@ resource "aws_subnet" "public_subnet" {
 
 
   tags = {
-    Name = join("-", [var.infrastucture_environment_name, "public-subnet"])
+    Name = join("-", [var.infrastucture_environment_name, "public-subnet-${count.index + 1}"])
 /*     "kubernetes.io/role/elb" = "1"
     "kubernetes.io/cluster/ogunleye_cluster" = "owned" */
 
