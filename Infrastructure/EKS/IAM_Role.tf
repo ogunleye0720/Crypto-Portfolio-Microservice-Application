@@ -58,11 +58,71 @@ data "aws_iam_policy_document" "example_assume_role_policy" {
   }
 }
 
-resource "aws_iam_role" "service_account_role" {
+/* resource "aws_iam_role" "service_account_role" {
   assume_role_policy = data.aws_iam_policy_document.example_assume_role_policy.json
   name               = var.service_account_role
+} */
+resource "aws_iam_role" "efs_service_account_role" {
+  assume_role_policy = data.aws_iam_policy_document.example_assume_role_policy.json
+  name               = var.efs_service_account_role
 }
 
+########## IAM POLICY AND ROLE ATTACHMENT FOR EFS ##########
+
+resource "aws_iam_role_policy_attachment" "AmazonEKS_EFS_CSI_DriverRole" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
+  role       = aws_iam_role.efs_service_account_role.name 
+}
+
+
+ # AWS EFS POLICY
+ # This would provide a fine-grain policy, allowing user define desired set of permissions.
+ # Remove comment and attach to AmazonEKS_EFS_CSI_DriverRole policy_arn attribute e.g policy_arn = aws_iam_policy.efs_policy.arn 
+ 
+/*  resource "aws_iam_policy" "efs_policy" {
+  name        = "test_policy"
+  path        = "/"
+  description = "My test policy"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "elasticfilesystem:DescribeAccessPoints",
+          "elasticfilesystem:DescribeFileSystems",
+          "elasticfilesystem:DescribeMountTargets",
+          "ec2:DescribeAvailabilityZones"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Action = [
+          "elasticfilesystem:CreateAccessPoint",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Action = [
+          "elasticfilesystem:TagResource",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Action = [
+          "elasticfilesystem:DeleteAccessPoint",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
+} */
 
 ########## EKS WORKER NODES IAM ROLES ##########
 

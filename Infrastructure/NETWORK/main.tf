@@ -32,8 +32,8 @@ resource "aws_subnet" "public_subnet" {
 
   tags = {
     Name = join("-", [var.infrastucture_environment_name, "public-subnet"])
-    "kubernetes.io/role/elb" = "1"
-    "kubernetes.io/cluster/ogunleye_cluster" = "owned"
+/*     "kubernetes.io/role/elb" = "1"
+    "kubernetes.io/cluster/ogunleye_cluster" = "owned" */
 
   }
 }
@@ -50,8 +50,8 @@ resource "aws_subnet" "private_subnet" {
 
   tags = {
     Name = join("-", [var.infrastucture_environment_name, "private-subnet-${count.index + 1}"])
-    "kubernetes.io/role/internal-elb" = "1"
-    "kubernetes.io/cluster/ogunleye_cluster" = "owned"
+/*     "kubernetes.io/role/internal-elb" = "1"
+    "kubernetes.io/cluster/ogunleye_cluster" = "owned" */
   }
 }
 
@@ -65,7 +65,7 @@ resource "aws_eip" "aws_eip" {
 resource "aws_nat_gateway" "nat_gateway" {
   count = length(var.private_cidrs)
   allocation_id = aws_eip.aws_eip[count.index].id
-  subnet_id     = aws_subnet.private_subnet[count.index].id
+  subnet_id     = aws_subnet.public_subnet[count.index].id
 
   tags = {
     Name = join("-", [var.infrastucture_environment_name, "NAT-gateway-${count.index + 1}"])
@@ -81,10 +81,11 @@ resource "aws_nat_gateway" "nat_gateway" {
 # ROUTE-TABLE CONFIGURATION SECTION
 
 resource "aws_route_table" "private_route_table" {
+  count = length(var.private_cidrs)
   vpc_id = aws_vpc.new_vpc.id
 
   tags = {
-    "Name" = join("-", [var.infrastucture_environment_name, "private-route-table"])
+    "Name" = join("-", [var.infrastucture_environment_name, "private-route-table${count.index + 1}"])
   }
 }
 
@@ -100,9 +101,9 @@ resource "aws_route_table" "public_route_table" {
 
 resource "aws_route" "private_route" {
  count = length(var.private_cidrs)
- route_table_id = aws_route_table.private_route_table.id
+ route_table_id = aws_route_table.private_route_table.*.id[count.index]
  destination_cidr_block = var.destination_cidr
- nat_gateway_id = aws_nat_gateway.nat_gateway[count.index].id 
+ nat_gateway_id = aws_nat_gateway.nat_gateway.*.id[count.index] 
 }
 
 resource "aws_route" "public_route" {
@@ -116,7 +117,7 @@ resource "aws_route" "public_route" {
 resource "aws_route_table_association" "private_subnet_association" {
   count = length(var.private_cidrs)
   subnet_id      = aws_subnet.private_subnet.*.id[count.index] #Routes all the private subnet to the NAT gateway(s) to enable fault tolerance
-  route_table_id = aws_route_table.private_route_table.id
+  route_table_id = aws_route_table.private_route_table.*.id[count.index]
 }
 
 resource "aws_route_table_association" "eks_public_subnet_association" {

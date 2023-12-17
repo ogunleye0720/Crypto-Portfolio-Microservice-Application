@@ -2,10 +2,10 @@ variable "eks_cluster_role" {
   type = string
   default = "eks_cluster_role"
 }
-variable "service_account_role" {
+/* variable "service_account_role" {
   type = string
   default = "service_account_role"
-}
+} */
 variable "eks_cluster_name" {
   type = string
   default = "digitalbank-cluster"
@@ -44,4 +44,8 @@ variable "min_size" {
 variable "max_unavailable" {
   type = number
   default = 1
+}
+variable "efs_service_account_role" {
+  type = string
+  default = "efs-service-account-role"
 }
