@@ -16,13 +16,13 @@
     	<version>2.1.0</version>
 	</parent>
 
-	<repositories>
+<!-- 	<repositories>
 		<repository>
 			<id>bintray-ca-sv</id>
 			<name>bintray-ca</name>
 			<url>https://dl.bintray.com/ca/sv/</url>
 		</repository>
-	</repositories>
+	</repositories> -->
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -282,12 +282,12 @@
 		</dependency>
 
 		<!-- CodeSV public build -->
-		<dependency>
+<!-- 		<dependency>
 			<groupId>com.broadcom.codesv</groupId>
 			<artifactId>codesv-dist-jar</artifactId>
 			<version>2.0.8</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
 
 	</dependencies>
 	
