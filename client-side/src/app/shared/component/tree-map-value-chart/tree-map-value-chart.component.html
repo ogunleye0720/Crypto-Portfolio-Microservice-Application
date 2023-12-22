@@ -1,0 +1,6 @@
+<div class="tree-map-chart-container" #treeMapChartContainer>
+  <ngx-charts-tree-map [results]="multi" [gradient]="gradient" [animations]="animations" [scheme]="'cool'"
+    [gradient]="gradient" [animations]="animations" [view]="view" (window:resize)="onResize()" [customColors]="customColor">
+  </ngx-charts-tree-map>
+  <span class="no-data-label" *ngIf="isMultiDataAvailable">Empty balance</span>
+</div>

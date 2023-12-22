@@ -1,0 +1,81 @@
+@import '../../../../styles.scss';
+
+.total-value-container {
+    background-color: $base-color;
+    border: 1px solid $border-color;
+    border-radius: 15px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: .5rem;
+    user-select: none;
+}
+
+.total-value-container-row {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.value-chart-container {
+    display: grid;
+    flex-direction: column;
+    justify-content: baseline;
+    width: 8rem;
+    margin-top: 0.15rem;
+    margin-left: 1rem;
+}
+
+.total-value-label-trend {
+    color: $text-color-darker;
+    font-weight: normal;
+    font-size: 0.7rem;
+    text-align: center;
+    padding-top: .2rem;
+}
+
+.component-container {
+    margin-left: 1.5rem;
+}
+
+
+.total-value-data {
+    color: $text-value-base-color;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.total-value-diff-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.total-value-diff-quote {
+    color: $text-color;
+    font-size: 0.8rem;
+}
+
+.total-value-diff-percent {
+    color: $text-color;
+    font-size: 0.8rem;
+}
+
+
+.total-value-label-balance {
+    color: $text-color-darker;
+    font-weight: normal;
+    font-size: 0.7rem;
+    text-align: left;
+}
+
+.tokens-treemap-chart-container {
+    display: flex;
+    width: 100%;
+    margin-left: 0.3rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.3rem;
+    justify-content: stretch;
+    align-items: stretch;
+}

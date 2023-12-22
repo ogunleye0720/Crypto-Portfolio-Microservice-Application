@@ -1,0 +1,39 @@
+version: "3"
+services:
+  firefox_node:
+    image: selenium/node-firefox:4.10.0
+    container_name: firefox_node
+    shm_size: 2gb
+    depends_on:
+      - selenium_hub
+    environment:
+      - SE_NODE_GRID_URL=http://localhost:4444
+      - SE_EVENT_BUS_HOST=selenium_hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_NODE_SESSION_TIMEOUT=60
+    networks:
+      - crypto-portfolio-microservices_test-env-network
+  record_firefox_video:
+    image: selenium/video:ffmpeg-4.3.1-20230614
+    container_name: record_firefox_video
+    volumes:
+      - ./target:/videos
+    depends_on:
+      - firefox_node
+    environment:
+      - DISPLAY_CONTAINER_NAME=firefox_node
+      - FILE_NAME=temp_video_firefox.mp4
+    networks:
+      - crypto-portfolio-microservices_test-env-network
+  selenium_hub:
+    image: selenium/hub:4.10.0
+    container_name: selenium_hub
+    ports:
+      - "4444:4444"
+    networks:
+      - crypto-portfolio-microservices_test-env-network
+networks:
+  crypto-portfolio-microservices_test-env-network:
+    external: true

@@ -1,0 +1,54 @@
+<div class="bar-container" (click)="changePriceData()" [satPopoverAnchor]="priceBarPopover"
+    (mouseenter)="mouseoverHandler()" (mouseleave)="mouseoutHandler()">
+    <div class="bar" *ngIf="data.name !== ''; else noData" [@slideInOut]="state">
+        <app-crypto-icon [text]="data.name" [satPopoverAnchor]="namePopover" (mouseenter)="namePopover.open()"
+            (mouseleave)="namePopover.close()"></app-crypto-icon>
+
+        <sat-popover #namePopover [anchor]="instantAnchor" horizontalAlign="center" verticalAlign="below">
+            <div class="tooltip-wrapper">
+                <span>Token name: {{data.name}}</span>
+            </div>
+        </sat-popover>
+
+        <div class="bar-item" [satPopoverAnchor]="symbolPopover"
+            (mouseenter)="symbolPopover.open()" (mouseleave)="symbolPopover.close()">{{data.symbol}}</div>
+        <div class="bar-item" [satPopoverAnchor]="pricePopover" (mouseenter)="pricePopover.open()"
+            (mouseleave)="pricePopover.close()">${{data.price.priceCurrent}}</div>
+        <div class="bar-item" [ngStyle]="{'color': getColor(data.price.percentChange1h)}"
+            [satPopoverAnchor]="percent1hPopover" (mouseenter)="percent1hPopover.open()"
+            (mouseleave)="percent1hPopover.close()">
+            {{data.price.percentChange1h}}%</div>
+        <div class="bar-item" [ngStyle]="{'color': getColor(data.price.percentChange24h)}"
+            [satPopoverAnchor]="percent24hPopover" (mouseenter)="percent24hPopover.open()"
+            (mouseleave)="percent24hPopover.close()">
+            {{data.price.percentChange24h}}%</div>
+    </div>
+</div>
+<sat-popover #priceBarPopover [anchor]="instantAnchor" horizontalAlign="start" verticalAlign="below">
+    <div class="tooltip-wrapper">
+        <span>Click me to switch token</span>
+    </div>
+</sat-popover>
+<sat-popover #symbolPopover [anchor]="instantAnchor" horizontalAlign="center" verticalAlign="below">
+    <div class="tooltip-wrapper">
+        <span>Token symbol</span>
+    </div>
+</sat-popover>
+<sat-popover #pricePopover [anchor]="instantAnchor" horizontalAlign="center" verticalAlign="below">
+    <div class="tooltip-wrapper">
+        <span>Token current price</span>
+    </div>
+</sat-popover>
+<sat-popover #percent1hPopover [anchor]="instantAnchor" horizontalAlign="center" verticalAlign="below">
+    <div class="tooltip-wrapper">
+        <span>Percent change 1H</span>
+    </div>
+</sat-popover>
+<sat-popover #percent24hPopover [anchor]="instantAnchor" horizontalAlign="center" verticalAlign="below">
+    <div class="tooltip-wrapper">
+        <span>Percent change 24H</span>
+    </div>
+</sat-popover>
+<ng-template #noData>
+    <div class="bar">No price data</div>
+</ng-template>

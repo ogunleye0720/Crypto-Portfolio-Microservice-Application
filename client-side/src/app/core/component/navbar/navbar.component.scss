@@ -1,0 +1,34 @@
+@import '../../../../styles.scss';
+
+.mat-toolbar {
+    background-color: $base-color-lighter;
+    color: $text-color;
+    font-style: monospace;
+    position: fixed;
+    z-index: 9998;
+    border-bottom: 1 px solid $border-color;
+}
+
+.nav-title-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $base-color-lighter;
+    border: none;
+    font-size: 1rem;
+    padding-right: 2rem;
+    transition: all 0.1s ease-in-out;
+}
+
+.nav-title-button:active {
+    transform: scale(0.92);
+}
+
+.mat-icon {
+    color: $text-color;
+    padding-right: 10px;
+}
+
+.nav-title {
+    color: $text-color;
+}

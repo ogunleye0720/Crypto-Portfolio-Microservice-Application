@@ -1,0 +1,267 @@
+@import '../../../../styles.scss';
+
+.inline-container {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 5px;
+}
+
+.container {
+    width: 90vw;
+}
+
+app-crypto-icon ::ng-deep img {
+    width: 1.8rem;
+    height: 1.8rem;
+    align-items: center;
+}
+
+.amount-row {
+    background-color: $base-color;
+}
+
+.amount-table-cell{
+    font-size: 1rem;
+    color: $text-color;
+    font-weight: bold;
+}
+
+
+.symbol-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.icon-item {
+    margin-top: 0.2rem;
+}
+
+.symbol {
+    margin-left: 0.7rem;
+    margin-top: 0.55rem;
+}
+
+.total-value {
+    color: $text-value-base-color;
+}
+
+.table-action-container {
+    display: flex;
+    flex-flow: row;
+    align-items: stretch;
+    background-color: $base-color;
+    border: 1px solid $border-color;
+    border-radius: 15px;
+    margin-top: 5px;
+}
+
+.table-action-button {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+i.material-icons {
+    font-size: 1.2rem;
+    color: $text-color;
+    position: relative;
+    border: solid 1px $border-color;
+    border-radius: 50%;
+    background-color: $base-color-lighter-2;
+    transition: color 0.2s ease, background-color 0.2s ease, transform 0.3s ease;
+    margin: 10px;
+}
+
+i.material-icons:after {
+    transition: all 0.5s ease;
+}
+
+i.material-icons:hover:after {
+    transform: scale(1);
+}
+
+i.material-icons:hover {
+    transform: rotate(90deg);
+    cursor: pointer;
+    box-shadow: none;
+}
+
+i.material-icons:active {
+    transform: scale(0.8);
+}
+
+.number-wallets {
+    vertical-align: middle;
+    color: $text-color;
+    font-size: 0.8rem;
+    text-align: right;
+    margin: 15px;
+    width: 100%;
+}
+
+.table-container {
+    background-color: $base-color-lighter;
+    padding-top: -20px;
+    margin-top: 5px;
+}
+
+.table-new-container {
+    background-color: transparent;
+    border-radius: 15px;
+    margin-top: 5px;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-header {
+    display: flex;
+    flex-flow: row;
+    align-items: stretch;
+}
+
+.table-header-cell {
+    padding: 5px;
+    color: $text-color-darker;
+    font-size: .7rem;
+    text-align: center;
+    vertical-align: auto;
+    width: 100%;
+}
+
+.table-header-cell-explorer {
+    padding: 5px;
+    color: $text-color;
+    font-size: .8rem;
+    text-align: center;
+    vertical-align: auto;
+    width: 20%;
+    margin-right: 0.2rem;
+}
+
+.table-row {
+    display: flex;
+    flex-direction: row;
+    vertical-align: baseline;
+    border: 0.5px solid $border-color;
+    border-radius: 15px;
+    height: 4rem;
+    position: relative;
+    align-items: center;
+
+}
+
+.balance-row {
+    background-image: linear-gradient(90deg, $base-color-lighter 0%, $base-color 44%);
+}
+
+.row-divider {
+    display: block;
+    min-height: 5px;
+}
+
+.table-cell {
+    padding: 5px;
+    text-align: center;
+    border-radius: 15px;
+    width: 100%;
+}
+
+.balance-table-cell {
+    font-size: 1rem;
+    color: $text-color;
+}
+
+.table-cell-explorer {
+    margin-right: 0.2rem;
+    padding: 5px;
+    display: flex;
+    color: $text-color;
+    width: 20%;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-cell-explorer {
+    text-decoration: none;
+}
+
+.icon-open-explorer {
+    margin-right: 0.2rem;
+    display: flex;
+    font-size: 0.9rem;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+[class*="col-"] {
+    width: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+    [class*="col-"] {
+        width: 95vw;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .col-1 {
+        width: 8.33%;
+    }
+
+    .col-2 {
+        width: 16.66%;
+    }
+
+    .col-3 {
+        width: 25%;
+    }
+
+    .col-4 {
+        width: 33.33%;
+    }
+
+    .col-5 {
+        width: 41.66%;
+    }
+
+    .col-6 {
+        width: 50%;
+    }
+
+    .col-7 {
+        width: 58.33%;
+    }
+
+    .col-8 {
+        width: 66.66%;
+    }
+
+    .col-9 {
+        width: 75vw;
+    }
+
+    .col-10 {
+        width: 83.33%;
+    }
+
+    .col-11 {
+        width: 91.66%;
+    }
+
+    .col-12 {
+        width: 100%;
+    }
+}

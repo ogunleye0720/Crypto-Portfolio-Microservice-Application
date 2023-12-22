@@ -1,0 +1,578 @@
+{
+	"info": {
+		"_postman_id": "821dbb96-fffa-47d2-9d52-b03efc28fdf0",
+		"name": "crypto-price-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10127139"
+	},
+	"item": [
+		{
+			"name": "cryptocurrency",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let crypto_name = pm.collectionVariables.get(\"crypto_name\");\r",
+							"let crypto_symbol = pm.collectionVariables.get(\"crypto_symbol\");\r",
+							"\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency name\", function () {\r",
+							"    pm.expect(jsonData.name).to.eql(crypto_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency symbol\", function () {\r",
+							"    pm.expect(jsonData.symbol).to.eql(crypto_symbol);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency coin market id\", function () {\r",
+							"    pm.expect(jsonData.coinMarketId).to.be.a(\"number\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency platform\", function () {\r",
+							"    pm.expect(jsonData.platform.platform).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency tokenAddress\", function () {\r",
+							"    pm.expect(jsonData.platform.tokenAddress).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency lastUpdate is not null\", function () {\r",
+							"    pm.expect(jsonData.lastUpdate).is.not.null\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set(\"crypto_id\", jsonData.id);\r",
+							"pm.collectionVariables.set(\"crypto_price_id\", jsonData.price.id);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function randomString(length=1) {\r",
+							"    let randomString = \"\";\r",
+							"    for (let i = 0; i < length; i++){\r",
+							"        randomString += pm.variables.replaceIn(\"{{$randomAlphaNumeric}}\");\r",
+							"    }\r",
+							"    return randomString;\r",
+							"}\r",
+							"\r",
+							"pm.collectionVariables.set(\"crypto_name\", \"Bitcoin\");\r",
+							"pm.collectionVariables.set(\"crypto_symbol\", \"BTC\");\r",
+							"pm.collectionVariables.set(\"crypto_platform\", \"bitcoin\");\r",
+							"pm.collectionVariables.set(\"crypto_tokenAddress\", \"token_address\");\r",
+							"\r",
+							"pm.collectionVariables.set(\"crypto_update_name\", \"BitcoinSV\");\r",
+							"pm.collectionVariables.set(\"crypto_update_symbol\", \"BSV\");\r",
+							"pm.collectionVariables.set(\"crypto_update_coinMarketId\", _.random(1,100000));\r",
+							"pm.collectionVariables.set(\"crypto_update_platform\", randomString(15));\r",
+							"pm.collectionVariables.set(\"crypto_update_tokenAddress\", randomString(15));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"{{crypto_name}}\",\r\n    \"symbol\":\"{{crypto_symbol}}\",\r\n    \"platform\":\"{{crypto_platform}}\",\r\n    \"tokenAddress\":\"{{crypto_tokenAddress}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/cryptocurrency",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"cryptocurrency"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cryptocurrency",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let crypto_name = pm.collectionVariables.get(\"crypto_name\");\r",
+							"let crypto_symbol = pm.collectionVariables.get(\"crypto_symbol\");\r",
+							"let crypto_coin_market_id = pm.collectionVariables.get(\"crypto_coinMarketId\");\r",
+							"let crypto_price_id = pm.collectionVariables.get(\"crypto_price_id\");\r",
+							"\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Successful GET request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency name\", function () {\r",
+							"    pm.expect(jsonData.name).to.eql(crypto_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency symbol\", function () {\r",
+							"    pm.expect(jsonData.symbol).to.eql(crypto_symbol);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency coin market id\", function () {\r",
+							"    pm.expect(jsonData.coinMarketId).to.eql(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency platform\", function () {\r",
+							"    pm.expect(jsonData.platform.platform).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency token address\", function () {\r",
+							"    pm.expect(jsonData.platform.tokenAddress).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency lastUpdate is not null\", function () {\r",
+							"    pm.expect(jsonData.lastUpdate).is.not.null\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency price id\", function () {\r",
+							"    pm.expect(jsonData.price.id).to.eql(crypto_price_id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/cryptocurrency/{{crypto_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"cryptocurrency",
+						"{{crypto_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cryptocurrencies-all",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let crypto_name = pm.collectionVariables.get(\"crypto_name\");\r",
+							"let crypto_symbol = pm.collectionVariables.get(\"crypto_symbol\");\r",
+							"let crypto_coin_market_id = pm.collectionVariables.get(\"crypto_coinMarketId\");\r",
+							"let crypto_price_id = pm.collectionVariables.get(\"crypto_price_id\");\r",
+							"\r",
+							"let jsonDataLastItem = _.last(pm.response.json());\r",
+							"\r",
+							"pm.test(\"Successful GET request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency name\", function () {\r",
+							"    pm.expect(jsonDataLastItem.name).to.eql(crypto_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency symbol\", function () {\r",
+							"    pm.expect(jsonDataLastItem.symbol).to.eql(crypto_symbol);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency coin market id\", function () {\r",
+							"    pm.expect(jsonDataLastItem.coinMarketId).to.eql(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency platform\", function () {\r",
+							"    pm.expect(jsonDataLastItem.platform.platform).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency token address\", function () {\r",
+							"    pm.expect(jsonDataLastItem.platform.tokenAddress).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency lastUpdate is not null\", function () {\r",
+							"    pm.expect(jsonDataLastItem.lastUpdate).is.not.null\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency price id\", function () {\r",
+							"    pm.expect(jsonDataLastItem.price.id).to.eql(crypto_price_id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/cryptocurrency",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"cryptocurrency"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cryptocurrencies-name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let crypto_name = pm.collectionVariables.get(\"crypto_name\");\r",
+							"let crypto_symbol = pm.collectionVariables.get(\"crypto_symbol\");\r",
+							"let crypto_coin_market_id = pm.collectionVariables.get(\"crypto_coinMarketId\");\r",
+							"let crypto_price_id = pm.collectionVariables.get(\"crypto_price_id\");\r",
+							"\r",
+							"let jsonDataLastItem = _.last(pm.response.json());\r",
+							"\r",
+							"pm.test(\"Successful GET request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency name\", function () {\r",
+							"    pm.expect(jsonDataLastItem.name).to.eql(crypto_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency symbol\", function () {\r",
+							"    pm.expect(jsonDataLastItem.symbol).to.eql(crypto_symbol);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency coin market id\", function () {\r",
+							"    pm.expect(jsonDataLastItem.coinMarketId).to.eql(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency platform\", function () {\r",
+							"    pm.expect(jsonDataLastItem.platform.platform).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency token address\", function () {\r",
+							"    pm.expect(jsonDataLastItem.platform.tokenAddress).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency lastUpdate is not null\", function () {\r",
+							"    pm.expect(jsonDataLastItem.lastUpdate).is.not.null\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency price id\", function () {\r",
+							"    pm.expect(jsonDataLastItem.price.id).to.eql(crypto_price_id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/cryptocurrency?name={{crypto_name}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"cryptocurrency"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{crypto_name}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cryptocurrency-contract-address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let crypto_name = pm.collectionVariables.get(\"crypto_name\");\r",
+							"let crypto_symbol = pm.collectionVariables.get(\"crypto_symbol\");\r",
+							"let crypto_coin_market_id = pm.collectionVariables.get(\"crypto_coinMarketId\");\r",
+							"let crypto_price_id = pm.collectionVariables.get(\"crypto_price_id\");\r",
+							"\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Successful GET request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency name\", function () {\r",
+							"    pm.expect(jsonData.name).to.eql(crypto_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency symbol\", function () {\r",
+							"    pm.expect(jsonData.symbol).to.eql(crypto_symbol);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency coin market id\", function () {\r",
+							"    pm.expect(jsonData.coinMarketId).to.eql(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency platform\", function () {\r",
+							"    pm.expect(jsonData.platform.platform).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency token address\", function () {\r",
+							"    pm.expect(jsonData.platform.tokenAddress).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency lastUpdate is not null\", function () {\r",
+							"    pm.expect(jsonData.lastUpdate).is.not.null\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency price id\", function () {\r",
+							"    pm.expect(jsonData.price.id).to.eql(crypto_price_id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/cryptocurrency/contract-address/{{crypto_tokenAddress}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"cryptocurrency",
+						"contract-address",
+						"{{crypto_tokenAddress}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cryptocurrency",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let crypto_name = pm.collectionVariables.get(\"crypto_update_name\");\r",
+							"let crypto_symbol = pm.collectionVariables.get(\"crypto_update_symbol\");\r",
+							"let crypto_coin_market_id = pm.collectionVariables.get(\"crypto_update_coinMarketId\");\r",
+							"let crypto_price_id = pm.collectionVariables.get(\"crypto_price_id\");\r",
+							"\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Successful PUT request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency name\", function () {\r",
+							"    pm.expect(jsonData.name).to.eql(crypto_name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency symbol\", function () {\r",
+							"    pm.expect(jsonData.symbol).to.eql(crypto_symbol);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency coin market id\", function () {\r",
+							"    pm.expect(jsonData.coinMarketId).to.eql(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency platform\", function () {\r",
+							"    pm.expect(jsonData.platform.platform).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency token address\", function () {\r",
+							"    pm.expect(jsonData.platform.tokenAddress).to.be.a(\"string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency lastUpdate is not null\", function () {\r",
+							"    pm.expect(jsonData.lastUpdate).is.not.null\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify json data cryptocurrency price id\", function () {\r",
+							"    pm.expect(jsonData.price.id).to.eql(crypto_price_id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"{{crypto_update_name}}\",\r\n    \"symbol\":\"{{crypto_update_symbol}}\",\r\n    \"platform\":\"{{crypto_update_platform}}\",\r\n    \"tokenAddress\":\"{{crypto_update_tokenAddress}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/cryptocurrency/{{crypto_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"cryptocurrency",
+						"{{crypto_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cryptocurrency",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful DELETE request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/cryptocurrency/{{crypto_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"cryptocurrency",
+						"{{crypto_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "crypto_id",
+			"value": ""
+		},
+		{
+			"key": "crypto_name",
+			"value": ""
+		},
+		{
+			"key": "crypto_symbol",
+			"value": ""
+		},
+		{
+			"key": "crypto_cryptoMarketId",
+			"value": ""
+		},
+		{
+			"key": "crypto_price_id",
+			"value": ""
+		},
+		{
+			"key": "crypto_update_name",
+			"value": ""
+		},
+		{
+			"key": "crypto_update_symbol",
+			"value": ""
+		},
+		{
+			"key": "crypto_update_cryptoMarketId",
+			"value": ""
+		},
+		{
+			"key": "crypto_coinMarketId",
+			"value": ""
+		},
+		{
+			"key": "crypto_update_coinMarketId",
+			"value": ""
+		},
+		{
+			"key": "crypto_update_platform",
+			"value": ""
+		},
+		{
+			"key": "crypto_update_tokenAddress",
+			"value": ""
+		},
+		{
+			"key": "crypto_platform",
+			"value": ""
+		},
+		{
+			"key": "crypto_tokenAddress",
+			"value": ""
+		}
+	]
+}

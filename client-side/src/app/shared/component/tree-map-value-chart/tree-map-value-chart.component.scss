@@ -1,0 +1,59 @@
+@import '../../../../styles.scss';
+
+::ng-deep .treemap-label {
+    font-size: 0.7rem;
+    color: $text-color;
+}
+
+::ng-deep .treemap-val {
+    color: $text-color;
+}
+
+::ng-deep .tooltip {
+    fill: rgb(255, 255, 255);
+    background-color: transparent;
+    color: $text-color;
+}
+
+::ng-deep .cell {
+
+    & {
+        opacity: 0.5;
+    }
+
+    &.active,
+    &:hover {
+        opacity: 0.6;
+        transition: opacity 100ms ease-in-out;
+    }
+}
+
+::ng-deep g {
+    outline: none;
+}
+
+:host {
+    display: block;
+    width: 98.5%;
+}
+
+.tree-map-chart-container {
+    position: relative;
+
+    .no-data-label {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 100%;
+        background-color: transparent;
+        color: $text-color;
+        font-size: 0.8rem;
+        text-align: center;
+        z-index: 2;
+        padding-top: 0.5rem;
+    }
+}

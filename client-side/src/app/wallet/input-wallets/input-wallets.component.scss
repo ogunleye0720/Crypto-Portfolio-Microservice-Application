@@ -1,0 +1,94 @@
+@import '../../../styles.scss';
+
+.container {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 65vh;
+}
+
+h1 {
+    color: $text-color;
+    margin-left: 0.1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    letter-spacing: .15em;
+}
+
+.title {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 2.2rem;
+    animation: typing 3s steps(160) 1;
+}
+
+.crypto_type_title {
+    font-size: 0.7rem;
+    animation: typing 8s steps(100) 1;
+    margin-left: 0.4rem;
+}
+
+@keyframes typing {
+    from {
+        width: 0%
+    }
+
+    to {
+        width: 100%
+    }
+}
+
+.wallet-input-container {
+    background-color: $base-color-lighter-input;
+    width: 90vw;
+    padding: 0.8rem;
+    display: inline-flex;
+    border: 1px solid $border-color;
+    border-radius: 15px;
+
+    input {
+        font-size: 1rem;
+        background-color: transparent;
+        border: none;
+        color: #ffffff;
+        flex: 1;
+        font-family: monospace;
+
+        &::placeholder {
+            color: #999999;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    button {
+        background-color: transparent;
+        border: none;
+        border-radius: 5%;
+        color: #ffffff;
+        cursor: pointer;
+        font-family: monospace;
+    }
+
+    button:active {
+        scale: 0.8;
+    }
+
+    .svg-icon {
+        width: 1.8em;
+        height: 1.8em;
+    }
+
+    .svg-icon path,
+    .svg-icon polygon,
+    .svg-icon rect {
+        fill: #999999;
+    }
+
+    .svg-icon circle {
+        stroke: #999999;
+        stroke-width: 1;
+    }
+}

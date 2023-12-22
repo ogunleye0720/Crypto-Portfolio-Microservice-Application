@@ -1,0 +1,39 @@
+<div class="total-value-container" (click)="changeTotalValueDataTime()">
+    <div class="total-value-container-row">
+        <div class="value-chart-container">
+            <div>
+                <app-trend-balance-chart class="chart-container" [data]="trendData"></app-trend-balance-chart>
+            </div>
+            <div class="total-value-label-trend">Trend Line 7d</div>
+        </div>
+        <div class="component-container">
+            <div class="data-container">
+                <div class="total-value-data"> {{ totalValueData.totalValue.toFixed(2) }} USD</div>
+                <div class="total-value-diff-container">
+                    <div class="total-value-diff-quote" *ngIf="switchNumber === 0"
+                        [ngStyle]="{'color': getColor(totalValueData.totalValue1h)}">1h ({{
+                        totalValueData.totalValue1h.toFixed(2) }}$)</div>
+                    <div class="total-value-diff-percent" *ngIf="switchNumber === 0"
+                        [ngStyle]="{'color': getColor(totalValueData.percentageChange1h)}">{{
+                        totalValueData.percentageChange1h.toFixed(2) }}%</div>
+                    <div class="total-value-diff-quote" *ngIf="switchNumber === 1"
+                        [ngStyle]="{'color': getColor(totalValueData.totalValue24h)}">24h ({{
+                        totalValueData.totalValue24h.toFixed(2) }}$)</div>
+                    <div class="total-value-diff-percent" *ngIf="switchNumber === 1"
+                        [ngStyle]="{'color': getColor(totalValueData.percentageChange24h)}">{{
+                        totalValueData.percentageChange24h.toFixed(2) }}%</div>
+                    <div class="total-value-diff-quote" *ngIf="switchNumber === 2"
+                        [ngStyle]="{'color': getColor(totalValueData.totalValue7d)}">7d ({{
+                        totalValueData.totalValue7d.toFixed(2) }}$)</div>
+                    <div class="total-value-diff-percent" *ngIf="switchNumber === 2"
+                        [ngStyle]="{'color': getColor(totalValueData.percentageChange7d)}">{{
+                        totalValueData.percentageChange7d.toFixed(2) }}%</div>
+                </div>
+                <div class="total-value-label-balance">Collective Balance</div>
+            </div>
+        </div>
+    </div>
+    <div class="tokens-treemap-chart-container">
+        <app-tree-map-value-chart></app-tree-map-value-chart>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+package pl.kargolek.walletservice.testutils.fixture;
+
+/**
+ * @author Karol Kuta-Orlowicz
+ */
+public enum DataWalletsAddressValid {
+    WALLET_1("0x742d35Cc6634C0532925a3b844Bc454e4438f44e"),
+    WALLET_2("0x5A0b54D5dc17e0AadC383d2db43B0a0D3E029c4c"),
+    WALLET_3("0x95f071372891ec292124408802a5397eb8838478"),
+    WALLET_4("0x5A0b54D5dc17e0AadC383d2db43B0a0D3E029c4d"),
+    WALLET_5("0x742d35Cc6634C0532925a3b844Bc454e4438f44b"),
+    WALLET_6("0x5A0b54D5dc17e0AadC383d2db43B0a0D3E029c4e"),
+    WALLET_7("0x742d35Cc6634C0532925a3b844Bc454e4438f44c"),
+    WALLET_8("0x5A0b54D5dc17e0AadC383d2db43B0a0D3E029c4f"),
+    WALLET_9("0x742d35Cc6634C0532925a3b844Bc454e4438f441"),
+    WALLET_10("0x5A0b54D5dc17e0AadC383d2db43B0a0D3E029c4a"),
+    WALLET_11("0x742d35Cc6634C0532925a3b844Bc454e4438f449"),
+    WALLET_12("0x5A0b54D5dc17e0AadC383d2db43B0a0D3E029c4b"),
+    WALLET_13("0x0dde392b5b37831f9ac22814a5309c1cb54ef9a2"),
+    WALLET_14("0x6e1aa366b14a1b0925621f46d73e70c6e2cb6afd"),
+    WALLET_15("0x9c8347496c071c2c3b3b9ef0584ab415f41da3b8"),
+    WALLET_16("0xe55f2ac90cba441edf77cb1893a96c573a2313b8"),
+    WALLET_17("0x3f0ae5141132e3aa6e4778395b56d1db774551a6"),
+    WALLET_18("0xa6512feb3fa89fa572a03cb50aca5bdd9f2407fc"),
+    WALLET_19("0x742d35Cc6634C0532925a3b844Bc454e4438f44e"),
+    WALLET_20("0x5A0b54D5dc17e0AadC383d2db43B0a0D3E029c4c"),
+    WALLET_21("0x742d35Cc6634C0532925a3b844Bc454e4438f44f");
+
+    private final String wallet;
+
+    DataWalletsAddressValid(String wallet) {
+        this.wallet = wallet;
+    }
+
+    public String getAddress() {
+        return wallet;
+    }
+}

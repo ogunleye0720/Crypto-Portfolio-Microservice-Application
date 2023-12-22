@@ -1,0 +1,45 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+    instance:
+      preferIpAddress: true
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: wallet-service
+
+feign:
+  circuitbreaker:
+    enabled: true
+
+cors:
+  allowedOrigin: "*"
+
+api:
+  etherscan:
+    baseUrl: "https://api.etherscan.io/api"
+    apiKey: ${ETHERSCAN_API_KEY}
+    fixedDelayMillis: 1200
+    maxRetryAttempts: 10
+    validateBodyFieldName: status
+    validationValue: 1
+    maxWalletsPerRequest: 20
+    maxWalletsCheck: 120
+  polygonscan:
+    baseUrl: "https://api.polygonscan.com/api"
+    apiKey: ${POLYGON_API_KEY}
+    maxWalletsPerRequest: 20
+  snowtrace:
+    baseUrl: "https://api.snowtrace.io/api"
+    apiKey: ${AVALANCHE_API_KEY}
+    maxWalletsPerRequest: 20
+
+explorer:
+  wallet:
+    etherscan: "https://etherscan.io/address/"
+    polygonscan: "https://polygonscan.com/address/"
+    snowtrace: "https://snowtrace.io/address/"

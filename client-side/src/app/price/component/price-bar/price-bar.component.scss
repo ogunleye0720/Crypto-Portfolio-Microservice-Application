@@ -1,0 +1,36 @@
+@import '../../../../styles.scss';
+
+.bar-container {
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    width: 100%;
+    overflow: hidden;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: center;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    color: $text-color;
+    user-select: none;
+}
+
+.bar {
+    display: flex;
+    flex-direction: row;
+    background-color: transparent;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.bar .bar-item {
+    color: $text-color;
+    margin: 1rem;
+}
+
+app-crypto-icon ::ng-deep img {
+    width: 1.4rem;
+    height: 1.4rem;
+    margin-top: .2rem
+}
