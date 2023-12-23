@@ -73,7 +73,7 @@ pipeline {
         }
         stage('Image Scanning Using TRIVY') {
             steps{
-                sh "trivy image ogunleye0720/cryptoservice:${BUILD_TAG} > trivy.txt"
+                sh "trivy image ogunleye0720/cryptopriceservice:${BUILD_TAG} > trivy.txt"
             }
         }
         stage('QA Testing') {
