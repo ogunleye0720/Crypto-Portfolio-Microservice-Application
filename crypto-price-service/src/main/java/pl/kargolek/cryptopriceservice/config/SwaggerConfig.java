@@ -20,7 +20,7 @@ public class SwaggerConfig {
                 .description("A service has been created to store, manipulate, and retrieve cryptocurrency prices" +
                         " from http://coinmarketcap.com")
                 .contact(new Contact()
-                        .email("karol.orlowicz@gmail.com")));
+                        .email("ogunleyedamola1995@yahoo.com")));
     }
 
 }

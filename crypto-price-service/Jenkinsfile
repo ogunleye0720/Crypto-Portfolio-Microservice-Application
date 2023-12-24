@@ -87,6 +87,10 @@ pipeline {
                 }
             }
             post {
+                success {
+                    echo "QA was successful !!!!"
+                }
+                
                 failure {
                     emailext (
                         attachLog: true,
