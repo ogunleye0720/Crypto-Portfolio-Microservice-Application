@@ -32,6 +32,7 @@ pipeline {
         stage('Code Analysis With Checkstyle'){
             steps {
                 sh 'mvn checkstyle:checkstyle'
+                sh 'mvn checkstyle:checkstyle > checkstyle.txt'
             }
             post {
                 success {
@@ -87,14 +88,16 @@ pipeline {
             }
             post {
                 failure {
-                    emailext attachLog: true,
-                    subject: "'${currentBuild.result}'",
-                    body: "Project: ${env.JOB_NAME}<br/>" +
-                           "Build Number: ${env.Build_NUMBER}<br/>" +
-                           "URL: ${env.BUILD_URL}<br/>" +
-                           "<h1>QA Testing Failed</h1>",
-                           to: 'adminemail@gmail.com',
-                           attachmentsPattern: 'trivy.txt'
+                    emailext (
+                        attachLog: true,
+                        subject: "'${currentBuild.result}'",
+                        body: "Project: ${env.JOB_NAME}<br/>" +
+                            "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                            "URL: ${env.BUILD_URL}<br/>" +
+                            "<h1>QA Testing Failed</h1>",
+                        to: 'adminemail@gmail.com',
+                        attachmentsPattern: 'trivy.txt, checkstyle.txt'
+                    )
                 }
             }
         }
