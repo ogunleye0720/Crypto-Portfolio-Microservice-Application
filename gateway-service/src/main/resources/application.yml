@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://cryptoprice:8761/eureka
     instance:
       preferIpAddress: true
 
@@ -15,17 +15,17 @@ spring:
     gateway:
       routes:
         - id: crypto-price-service
-          uri: http://localhost:8081/
+          uri: http://cryptoprice:8081/
           predicates:
             - Path=/api/v1/cryptocurrency/**
         - id: wallet-service
-          uri: http://localhost:8082/
+          uri: http://wallet:8082/
           predicates:
             - Path=/api/v1/wallet/**
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: "http://localhost:4200"
+            allowedOrigins: "http://gateway:4200"
             allowedMethods:
               - GET
               - POST
