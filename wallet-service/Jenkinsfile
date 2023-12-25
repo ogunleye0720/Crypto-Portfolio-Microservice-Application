@@ -49,9 +49,9 @@ pipeline {
         stage('Static Application Security Test'){
             steps {
                 withSonarQubeEnv('sonarserver'){
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=cryptoPriceService \
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=walletservice \
                     -Dsonar.java.binaries=. \
-                    -Dsonar.projectKey=cryptoPriceService '''
+                    -Dsonar.projectKey=walletservice '''
                 }
             }
         }
@@ -67,7 +67,7 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
                         sh "docker build -t ogunleye0720/walletservice:${BUILD_TAG} ."
-                        sh "docker push ogunleye0720/cryptopriceservice:${BUILD_TAG}"
+                        sh "docker push ogunleye0720/walletservice:${BUILD_TAG}"
                     }
                 }
             }
