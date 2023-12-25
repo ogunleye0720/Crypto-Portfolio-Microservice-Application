@@ -1,0 +1,109 @@
+pipeline {
+    agent any
+    tools {
+        maven "MAVEN3"
+        JDK "jdk17"
+    }
+    environment {
+        SCANNER_HOME=tool 'sonarqube'
+    }
+    stages {
+        stage('Build'){
+            steps{
+                sh 'mvn -DskipTests clean install'
+            }
+            post {
+                success {
+                    echo 'Archiving Artifact'
+                    archiveArtifacts artifacts: '**/target/*.jar'
+                }
+            }
+        }
+        stage('Unit Test'){
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Integration Test'){
+            steps {
+                sh 'mvn verify -DskipUnitTests'
+            }
+        }
+        stage('Code Analysis With Checkstyle'){
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+                sh 'mvn checkstyle:checkstyle > checkstyle.txt'
+            }
+            post {
+                success {
+                    echo 'Generated Analysis Result'
+                }
+            }
+        }
+        stage('OWASP Source Composition Analysis'){
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ ' , odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage('Static Application Security Test'){
+            steps {
+                withSonarQubeEnv('sonarserver'){
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=gatewayservice \
+                    -Dsonar.java.binaries=. \
+                    -Dsonar.projectKey=gatewayservice '''
+                }
+            }
+        }
+        stage('quality gate'){
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonarqube-token'
+                }
+            }
+        }
+        stage('Building and Pushing to Docker Hub') {
+            steps{
+                script {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+                        sh "docker build -t ogunleye0720/gatewayservice:${BUILD_TAG} ."
+                        sh "docker push ogunleye0720/gatewayservice:${BUILD_TAG}"
+                    }
+                }
+            }
+        }
+        stage('Image Scanning Using TRIVY') {
+            steps{
+                sh "trivy image ogunleye0720/gatewayservice:${BUILD_TAG} > trivy.txt"
+            }
+        }
+        stage('QA Testing') {
+            steps{
+                sh 'docker rm -f qacontainer'
+                sh 'docker run -d --name qacontainer -p 8081:8081 ogunleye0720/gatewayservice:latest'
+                sleep time: 60, unit: 'SECONDS'
+                retry(5){
+                    sh 'curl --silent http://jenkins_ip:8081'
+                }
+            }
+            post {
+                success {
+                    echo "QA was successful !!!!"
+                }
+                
+                failure {
+                    emailext (
+                        attachLog: true,
+                        subject: "'${currentBuild.result}'",
+                        body: "Project: ${env.JOB_NAME}<br/>" +
+                            "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                            "URL: ${env.BUILD_URL}<br/>" +
+                            "<h1>QA Testing Failed</h1>",
+                        to: 'adminemail@gmail.com',
+                        attachmentsPattern: 'trivy.txt, checkstyle.txt'
+                    )
+                }
+            }
+        }
+    }
+}
