@@ -1,0 +1,39 @@
+pipeline {
+  agent any
+  tools{
+
+  }
+  stages {
+    stage('Install Dependencies') {
+      steps{
+          sh 'npm install -g @angular/cli'
+          sh 'npm install @angular-devkit/build-angular --force'
+          sh 'npm install'
+      }
+    }
+    stage('Unit Test') {
+      steps{
+          sh 'ng test'
+      }
+    }
+    stage('lint Test') {
+      steps{
+          sh 'ng lint'
+      }
+    }
+    stage('lint Test') {
+      steps{
+          sh 'ng lint'
+      }
+    }
+    stage('Build Stage') {
+      steps{
+          sh 'ng build'
+      }
+    }
+    stage('Composition Analysis') {
+
+    }
+  }
+
+}
