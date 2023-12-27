@@ -21,17 +21,18 @@ pipeline {
           sh 'ng lint'
       }
     }
-    stage('lint Test') {
-      steps{
-          sh 'ng lint'
-      }
-    }
     stage('Build Stage') {
       steps{
           sh 'ng build'
       }
     }
-    stage('Composition Analysis') {
+    stage('OWASP Source Composition Analysis') {
+      steps{
+          dependencyCheck additionalArguments: '--scan ./' , odcInstallation: 'DP-Check'
+          dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+      }
+    }
+    stage('Static Application Security Test') {
       steps {
         container('SonarQubeScanner') {
             withSonarQubeEnv('SonarQube') {
@@ -40,6 +41,48 @@ pipeline {
             timeout(time: 10, unit: 'MINUTES') {
               waitForQualityGate abortPipeline: false
             }
+        }
+      }
+    }
+    stage('Building and Pushing to Docker Hub') {
+      steps {
+        script {
+          withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+            sh "docker build -t ogunleye0720/clientside:${BUILD_TAG} ."
+            sh "docker push ogunleye0720/clientside:${BUILD_TAG}"
+          }
+        }
+      }
+    }
+    stage('Image Scanning Using TRIVY') {
+      steps {
+        sh "trivy image ogunleye0720/clientside:${BUILD_TAG} > trivy.txt"
+      }
+    }
+    stage('QA Testin'){
+      steps {
+        sh 'docker rm -f qacontainer'
+        sh 'docker run -d --name qacontainer -p 80:80 ogunleye0720/clientside:latest'
+        sleep time: 60, unit: 'SECONDS'
+        retry(5){
+          sh 'curl --silent http://jenkins_ip:80'
+        }
+      }
+      post {
+        success {
+            echo "QA was successful !!!!"
+        }
+        failure {
+          emailext(
+            attachLog: true,
+            subject: "'${currentBuild.result}'",
+            body: "Project: ${env.JOB_NAME}<br/>" +
+                "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                "URL: ${env.BUILD_URL}<br/>" +
+                "<h1>QA Testing failed</h1>",
+            to: 'adminemail@gmail.com',
+            attachmentsPattern: 'trivy.txt'
+          )
         }
       }
     }
