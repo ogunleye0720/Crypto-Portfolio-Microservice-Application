@@ -13,7 +13,7 @@ pipeline {
     }
     stage('Unit Test') {
       steps{
-          sh 'ng test'
+          sh 'ng test --watch=false --code-coverage'
       }
     }
     stage('lint Test') {
@@ -32,7 +32,16 @@ pipeline {
       }
     }
     stage('Composition Analysis') {
-
+      steps {
+        container('SonarQubeScanner') {
+            withSonarQubeEnv('SonarQube') {
+              sh "/usr/local/sonar-scanner"
+            }
+            timeout(time: 10, unit: 'MINUTES') {
+              waitForQualityGate abortPipeline: false
+            }
+        }
+      }
     }
   }
 
