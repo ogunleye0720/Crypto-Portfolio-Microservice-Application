@@ -23,7 +23,7 @@ pipeline {
     }
     stage('Build Stage') {
       steps{
-          sh 'ng build'
+          sh 'ng build --prod'
       }
     }
     stage('OWASP Source Composition Analysis') {
@@ -33,15 +33,18 @@ pipeline {
       }
     }
     stage('Static Application Security Test') {
-      steps {
-        container('SonarQubeScanner') {
-            withSonarQubeEnv('SonarQube') {
-              sh "/usr/local/sonar-scanner"
-            }
-            timeout(time: 10, unit: 'MINUTES') {
-              waitForQualityGate abortPipeline: false
-            }
-        }
+      steps{
+          withSonarQubeEnv('sonarserver') {
+            sh '''$ SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=clientside \
+            -Dsonar.projectkey=clientside '''
+          }
+      }
+    }
+    stage("Quality gate"){
+      steps{
+          script {
+            waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-token'
+          }
       }
     }
     stage('Building and Pushing to Docker Hub') {
