@@ -1,35 +1,35 @@
 pipeline {
   agent any
   tools{
-
+    JDK "jdk17"
   }
   stages {
     stage('Install Dependencies') {
       steps{
-          sh 'npm install -g @angular/cli'
-          sh 'npm install @angular-devkit/build-angular --force'
-          sh 'npm install'
+        sh 'npm install -g @angular/cli'
+        sh 'npm install @angular-devkit/build-angular --force'
+        sh 'npm install'
       }
     }
     stage('Unit Test') {
       steps{
-          sh 'ng test --watch=false --code-coverage'
+        sh 'ng test --watch=false --code-coverage'
       }
     }
     stage('lint Test') {
       steps{
-          sh 'ng lint'
+        sh 'ng lint'
       }
     }
     stage('Build Stage') {
       steps{
-          sh 'ng build --prod'
+        sh 'ng build --prod'
       }
     }
     stage('OWASP Source Composition Analysis') {
       steps{
-          dependencyCheck additionalArguments: '--scan ./' , odcInstallation: 'DP-Check'
-          dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        dependencyCheck additionalArguments: '--scan ./' , odcInstallation: 'DP-Check'
+        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
       }
     }
     stage('Static Application Security Test') {
