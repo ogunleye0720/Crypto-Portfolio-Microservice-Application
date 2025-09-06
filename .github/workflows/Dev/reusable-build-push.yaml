@@ -1,0 +1,38 @@
+name: Reusable Build & Push
+
+on:
+  workflow_call:
+    inputs:
+      service:
+        required: true
+        type: string
+      dockerfile:
+        required: true
+        type: string
+      context:
+        required: true
+        type: string
+    secrets:
+      REGISTRY_USER:
+        required: true
+      REGISTRY_PASS:
+        required: true
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to registry
+        run: echo "${{ secrets.REGISTRY_PASS }}" | docker login ghcr.io -u "${{ secrets.REGISTRY_USER }}" --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}/${{ inputs.service }}:${{ github.sha }} \
+          -f ${{ inputs.dockerfile }} ${{ inputs.context }}
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository }}/${{ inputs.service }}:${{ github.sha }}
