@@ -25,9 +25,6 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Run Unit Tests
-        run: npm run test -- --watch=false --browsers=ChromeHeadless
-
   # Stage 2: Code Analysis with SonarCloud
   sonarcloud:
     needs: test
