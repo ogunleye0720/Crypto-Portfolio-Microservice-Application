@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-  # Stage 2: Code Analysis with SonarQube Cloud
+  # Stage 2: Code Analysis with Sonar Cloud
   sonarcloud:
     needs: install-angular
     runs-on: ubuntu-latest
@@ -43,7 +43,6 @@ jobs:
           args: >
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
-            -Dsonar.sources=src/
             -Dsonar.verbose=true
 
   # Stage 3: Build Docker image
