@@ -45,7 +45,7 @@ jobs:
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.verbose=true
 
-  # Stage 3: Build Docker image
+  # Stage 3: Build Image and Push to DockerHub
   docker-build:
     needs: [install-angular, sonarcloud]
     runs-on: ubuntu-latest
@@ -53,14 +53,32 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Log in to GHCR
-        run: echo "${{ secrets.REGISTRY_PASS }}" | docker login ghcr.io -u "${{ secrets.REGISTRY_USER }}" --password-stdin
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.REGISTRY_PASS }}" | docker login -u "${{ secrets.REGISTRY_USER }}" --password-stdin
 
-      - name: Build Docker image
+      # Generate new semantic version (bump based on commits)
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: ""
+
+      - name: Build Docker images
         run: |
-          IMAGE=ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
-          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
-          docker build -t $IMAGE .
+          IMAGE_NAME=docker.io/${{ secrets.REGISTRY_USER }}/client-side
+          VERSION=${{ steps.tag_version.outputs.new_tag }}
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          
+          # Build images with multiple tags
+          docker build -t $IMAGE_NAME:$VERSION -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ github.sha }} ./client-side
+
+      - name: Push Docker images
+        run: |
+          docker push $IMAGE_NAME:$VERSION
+          docker push $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:${{ github.sha }}
 
   # Stage 4: Trivy Security Scan
   trivy-scan:
