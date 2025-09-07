@@ -116,17 +116,36 @@ jobs:
 
   # Stage 5: Push Docker image (only if scan passes)
   docker-push:
-    needs: trivy-scan
+    needs: [docker-build, trivy-scan]
     runs-on: ubuntu-latest
     steps:
       - name: Log in to Docker Hub
         run: echo "${{ secrets.REGISTRY_PASS }}" | docker login -u "${{ secrets.REGISTRY_USER }}" --password-stdin
 
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: client-image
+          path: .
+
+      - name: Load Docker image
+        run: docker load -i image.tar
+
       - name: Push Docker images
         run: |
           IMAGE_NAME=${{ needs.docker-build.outputs.image_name }}
           VERSION=${{ needs.docker-build.outputs.version }}
-
+        
+          # Debug: Print values to verify they're not empty
+          echo "IMAGE_NAME: $IMAGE_NAME"
+          echo "VERSION: $VERSION"
+          echo "SHA: ${{ github.sha }}"
+        
+          # Tag the loaded image with all required tags
+          docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
+          docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:${{ github.sha }}
+        
+          # Push all tags
           docker push $IMAGE_NAME:$VERSION
           docker push $IMAGE_NAME:latest
-          docker push $IMAGE_NAME:${{ github.sha }}
+          docker push $IMAGE_NAME:${{ github.sha }}  
