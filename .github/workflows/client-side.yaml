@@ -81,22 +81,36 @@ jobs:
           # Build images with multiple tags (but do not push yet)
           docker build -t $IMAGE_NAME:$VERSION -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ github.sha }} ./client-side
 
+          # Save image as artifact
+          docker save $IMAGE -o image.tar
+        shell: bash
+        
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-image
+          path: image.tar
+
   # Stage 4: Trivy Security Scan
   trivy-scan:
     needs: docker-build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: client-image
+          path: .
+
+      - name: Load Docker image
+        run: docker load -i image.tar
 
       - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.20.0
         with:
           image-ref: ${{ needs.docker-build.outputs.image }}
           format: 'table'
           exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
 
   # Stage 5: Push Docker image (only if scan passes)
