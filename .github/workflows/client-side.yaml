@@ -106,9 +106,10 @@ jobs:
         run: docker load -i image.tar
 
       - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: ${{ needs.docker-build.outputs.image }}
+          scan-type: image
+          input: image.tar
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
