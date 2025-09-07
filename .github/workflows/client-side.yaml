@@ -27,7 +27,7 @@ jobs:
 
   # Stage 2: Code Analysis with SonarQube Cloud
   sonarcloud:
-    needs: test
+    needs: install-angular
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -48,7 +48,7 @@ jobs:
 
   # Stage 3: Build Docker image
   docker-build:
-    needs: [test, sonarcloud]
+    needs: [install-angular, sonarcloud]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
