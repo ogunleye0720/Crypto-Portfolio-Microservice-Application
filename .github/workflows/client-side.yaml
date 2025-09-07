@@ -133,7 +133,7 @@ jobs:
 
       - name: Push Docker images
         run: |
-          IMAGE_NAME=${{ needs.docker-build.outputs.image_name }}
+          IMAGE_NAME="docker.io/${{ secrets.REGISTRY_USER }}/client-side"
           VERSION=${{ needs.docker-build.outputs.version }}
         
           # Debug: Print values to verify they're not empty
