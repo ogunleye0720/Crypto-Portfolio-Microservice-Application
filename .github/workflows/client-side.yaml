@@ -41,7 +41,7 @@ jobs:
         with:
           projectBaseDir: client-side/src
           args: >
-            -Dsonar.projectKey=ogunleye0720
+            -Dsonar.projectKey=${{ secrets.SONAR_ORG }}_${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.verbose=true
 
