@@ -69,7 +69,7 @@ jobs:
           tag_prefix: ""
 
       - name: Build Docker images
-        id: build
+        id: meta
         run: |
           IMAGE_NAME=docker.io/${{ secrets.REGISTRY_USER }}/client-side
           VERSION=${{ steps.tag_version.outputs.new_tag }}
