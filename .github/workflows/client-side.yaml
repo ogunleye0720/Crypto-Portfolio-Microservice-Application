@@ -49,6 +49,10 @@ jobs:
   docker-build:
     needs: [install-angular, sonarcloud]
     runs-on: ubuntu-latest
+    outputs:
+      image_name: ${{ steps.build.outputs.image_name }}
+      version: ${{ steps.build.outputs.version }}
+      image: ${{ steps.build.outputs.image }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -65,12 +69,14 @@ jobs:
           tag_prefix: ""
 
       - name: Build Docker images
+        id: build
         run: |
           IMAGE_NAME=docker.io/${{ secrets.REGISTRY_USER }}/client-side
           VERSION=${{ steps.tag_version.outputs.new_tag }}
-          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "IMAGE=$IMAGE_NAME:$VERSION" >> $GITHUB_ENV
+          IMAGE=$IMAGE_NAME:$VERSION
+          echo "image_name=$IMAGE_NAME" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
           
           # Build images with multiple tags (but do not push yet)
           docker build -t $IMAGE_NAME:$VERSION -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ github.sha }} ./client-side
@@ -86,7 +92,7 @@ jobs:
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: ${{ env.IMAGE }}
+          image-ref: ${{ needs.docker-build.outputs.image }}
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
@@ -101,6 +107,9 @@ jobs:
 
       - name: Push Docker images
         run: |
+          IMAGE_NAME=${{ needs.docker-build.outputs.image_name }}
+          VERSION=${{ needs.docker-build.outputs.version }}
+          
           docker push $IMAGE_NAME:$VERSION
           docker push $IMAGE_NAME:latest
           docker push $IMAGE_NAME:${{ github.sha }}
