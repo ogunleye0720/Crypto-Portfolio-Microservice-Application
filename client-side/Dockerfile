@@ -1,35 +1,23 @@
-# ---------------------------
 # Stage 1: Build Angular app
-# ---------------------------
-FROM node:18.20.4-alpine3.20 AS build
+FROM node:18-alpine AS build
 WORKDIR /app
 
-# Install dependencies
 COPY package*.json ./
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 
-# Copy source code and build
 COPY . .
 RUN npm run build --prod
 
-# ---------------------------
-# Stage 2: Serve with Nginx
-# ---------------------------
-FROM nginx:1.27-alpine
+# Stage 2: Final Nginx image
+FROM nginx:1.27-alpine3.21 AS final
 
-# Remove default Nginx page
-RUN rm -rf /usr/share/nginx/html/*
+# Upgrade Alpine packages to latest security patches (fixes libxml2 CVEs)
+RUN apk --no-cache upgrade
 
-# Copy built Angular app from build stage
+# Clean default config and copy our own
+RUN rm /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy custom nginx config (optional, e.g., for Angular routing)
-# Make sure you have nginx.conf in your project root
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port
 EXPOSE 80
-
-# Run nginx
 CMD ["nginx", "-g", "daemon off;"]
-
