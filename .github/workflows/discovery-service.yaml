@@ -47,6 +47,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Compile the project first (Sonar needs .class files in target/classes)
+      - name: Compile with Maven (no tests)
+        run: mvn -B clean compile -DskipTests
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v4
         env:
@@ -58,6 +62,8 @@ jobs:
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.verbose=true
+            -Dsonar.java.binaries=target/classes
+
 
   # Stage 3: Docker Build (with semantic version)
   docker-build:
