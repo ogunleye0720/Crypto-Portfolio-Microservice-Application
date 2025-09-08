@@ -5,8 +5,9 @@ WORKDIR /app
 # Copy the whole project (parent + submodules)
 COPY . .
 
-# Build only the discovery-server JAR
-RUN mvn -pl discovery-server clean package -DskipTests
+# First install the parent POM to local repository, then build discovery-server
+RUN mvn clean install -N -DskipTests && \
+    mvn -pl discovery-server clean package -DskipTests
 
 # Stage 2: Runtime
 FROM openjdk:17-jdk-slim
