@@ -1,7 +1,6 @@
 name: Frontend CI
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   # Stage 1: Install Angular
