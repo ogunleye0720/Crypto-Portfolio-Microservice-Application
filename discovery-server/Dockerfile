@@ -5,9 +5,19 @@ WORKDIR /app
 # Copy the whole project (parent + submodules)
 COPY . .
 
-# First install the parent POM to local repository, then build discovery-server
-RUN mvn clean install -N -DskipTests && \
-    mvn -pl discovery-server clean package -DskipTests
+# Debug: Check the directory structure and POM files
+RUN echo "=== Directory structure ===" && \
+    find . -name "pom.xml" -exec echo "Found POM: {}" \; && \
+    echo "=== Root POM content ===" && \
+    head -20 pom.xml && \
+    echo "=== Discovery-server POM parent section ===" && \
+    head -20 discovery-server/pom.xml
+
+# Try different approaches based on the project structure
+# Option 1: Build from root with specific reactor projects
+RUN mvn clean install -pl discovery-server -am -DskipTests || \
+    # Option 2: If option 1 fails, build everything
+    mvn clean package -DskipTests
 
 # Stage 2: Runtime
 FROM openjdk:17-jdk-slim
