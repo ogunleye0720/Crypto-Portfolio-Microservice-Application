@@ -151,7 +151,7 @@ jobs:
 
       - name: Push Docker images
         run: |
-          IMAGE_NAME="docker.io/${{ secrets.REGISTRY_USER }}/wallet-service "
+          IMAGE_NAME="docker.io/${{ secrets.REGISTRY_USER }}/wallet-service"
           VERSION=${{ needs.docker-build.outputs.version }}
         
           # Debug: Print values to verify they're not empty
