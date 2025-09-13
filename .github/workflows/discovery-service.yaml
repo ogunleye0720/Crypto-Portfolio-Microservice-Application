@@ -146,6 +146,9 @@ jobs:
           name: discovery-image
           path: .
 
+      - name: Load Docker image
+        run: docker load -i image.tar
+
       - name: Push Docker images
         run: |
           IMAGE_NAME="docker.io/${{ secrets.REGISTRY_USER }}/discovery-service"
