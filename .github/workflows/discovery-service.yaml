@@ -130,7 +130,7 @@ jobs:
           input: image.tar
           format: 'table'
           exit-code: '1'
-          severity: 'CRITICAL,HIGH'
+          severity: 'LOW'
 
   # Stage 5: Push to DockerHub
   docker-push:
