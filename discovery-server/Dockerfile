@@ -1,19 +1,20 @@
 # Stage 1: Build
+# Stage 1: Build
 FROM maven:3.9.9-eclipse-temurin-17 AS builder
 WORKDIR /app
-
-# Copy the whole project (parent + submodules)
 COPY . .
+RUN sed -i '/<parent>/,/<\/parent>/c\
+<parent>\
+    <groupId>org.springframework.boot</groupId>\
+    <artifactId>spring-boot-starter-parent</artifactId>\
+    <version>2.7.8</version>\
+    <relativePath\/>\
+</parent>' pom.xml
+RUN mvn clean package -DskipTests
 
-# Build only the discovery-server JAR
-RUN mvn -pl discovery-server clean package -DskipTests
-
-# Stage 2: Runtime
-FROM openjdk:17-jdk-slim
+# Stage 2: Runtime (secure, small base)
+FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-
-# Copy the discovery-server JAR from builder stage
-COPY --from=builder /app/discovery-server/target/*.jar app.jar
-
+COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 8761
 ENTRYPOINT ["java", "-jar", "app.jar"]
