@@ -106,7 +106,7 @@ jobs:
       - name: Upload image artifact
         uses: actions/upload-artifact@v4
         with:
-          name: discovery-image
+          name: crypto-price-image
           path: image.tar
 
   # Stage 4: Trivy Security Scan
