@@ -9,7 +9,8 @@ env:
   AVALANCHE_API_KEY: ${{ secrets.AVALANCHE_API_KEY }}
 
 on:
-  workflow_dispatch:
+  push:
+    branches: ["main"]
 
 jobs:
   # Stage 1: Build & Test
