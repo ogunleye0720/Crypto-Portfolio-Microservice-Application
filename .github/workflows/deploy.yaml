@@ -1,8 +1,8 @@
-name: Deploy
+name: Deploy Microservices to AWS EC2
 
 on:
-  pull_request:
-    branches:
+  push:
+    branches-ignore:
       - main
 
 jobs:
@@ -10,16 +10,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/ubuntu/app
-            docker-compose pull
-            docker-compose up -d --remove-orphans
+            set -e
+
+            # Navigate to your app directory (adjust if needed)
+            cd ~/ || {
+              echo "Cloning fresh repo..."
+              sudo apt update -y && sudo apt upgrade -y
+              sudo apt install -y git unzip
+              git clone https://github.com/${{ github.repository }}.git
+              cd Crypto-Portfolio-Microservice-Application
+            }
+
+            # Pull latest changes
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Create .env file dynamically
+            cat > .env <<EOL
+            MYSQL_USER=${{ secrets.MYSQL_USER }}
+            MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+            COIN_MARKET_CAP_API_KEY=${{ secrets.COIN_MARKET_CAP_API_KEY }}
+            ETHERSCAN_API_KEY=${{ secrets.ETHERSCAN_API_KEY }}
+            POLYGON_API_KEY=${{ secrets.POLYGON_API_KEY }}
+            AVALANCHE_API_KEY=${{ secrets.AVALANCHE_API_KEY }}
+            EOL
+
+            # Run docker-compose
+            docker-compose down
+            docker-compose up -d --build
