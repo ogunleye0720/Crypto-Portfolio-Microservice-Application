@@ -60,6 +60,9 @@ jobs:
             git reset --hard origin/main
 
             # Create .env file dynamically
+            if [ -f ".env" ]; then
+              sudo rm .env
+            fi
             cat > .env <<EOL
             MYSQL_USER=${{ secrets.MYSQL_USER }}
             MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
